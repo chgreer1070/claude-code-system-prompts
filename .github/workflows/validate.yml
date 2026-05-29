@@ -1,0 +1,24 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Syntax-check tools
+        run: |
+          node --check tools/updatePrompts.js
+          node --check tools/validate.js
+
+      - name: Validate README links and prompt metadata
+        run: node tools/validate.js
